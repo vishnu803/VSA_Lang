@@ -20,7 +20,7 @@ int sym[26]; /* symbol table */
 }; 
 %token <iValue> INTEGER 
 %token <sIndex> VARIABLE 
-%token WHILE IF PRINT 
+%token WHILE IF PRINT FOR 
 %nonassoc IFX 
 %nonassoc ELSE 
 %left GE LE EQ NE '>' '<' 
@@ -31,7 +31,7 @@ int sym[26]; /* symbol table */
 %% 
 program: 
  function { exit(0); } 
- ; 
+; 
 function: 
 function stmt { ex($2); freeNode($2); } 
 | /* NULL */ 
@@ -42,9 +42,9 @@ stmt:
 | PRINT expr ';' { $$ = opr(PRINT, 1, $2); } 
 | VARIABLE '=' expr ';' { $$ = opr('=', 2, id($1), $3); } 
 | WHILE '(' expr ')' stmt { $$ = opr(WHILE, 2, $3, $5); } 
+| FOR '(' ';' expr ';' ')' stmt { $$ = opr(FOR, 2, $4, $7);  } 
 | IF '(' expr ')' stmt %prec IFX { $$ = opr(IF, 2, $3, $5); } 
-| IF '(' expr ')' stmt ELSE stmt 
-{ $$ = opr(IF, 3, $3, $5, $7); } 
+| IF '(' expr ')' stmt ELSE stmt { $$ = opr(IF, 3, $3, $5, $7); } 
 | '{' stmt_list '}' { $$ = $2; } 
 ; 
 stmt_list: 

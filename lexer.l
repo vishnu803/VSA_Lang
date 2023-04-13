@@ -15,11 +15,12 @@
 "=="                                { return EQ; } 
 "!="                                { return NE; } 
 "while"                             { return WHILE; } 
+"for"                               { return FOR; } 
 "if"                                { return IF; } 
 "else"                              { return ELSE; } 
 "print"                             { return PRINT; } 
-[ \t\n]+                            ; /* ignore whitespace */ 
-. yyerror("Unknown character"); 
+[ \t\n]+                            { ; /* ignore whitespace */} 
+.                                   { yyerror("Unknown character");} 
 %% 
 
 int yywrap(void) { 
